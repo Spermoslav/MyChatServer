@@ -16,8 +16,6 @@ find_package(Qt${QT_VERSION_MAJOR}Network REQUIRED)
 
 set(PROJECT_SOURCES
         main.cpp
-        widget.cpp
-        widget.h
         menu.cpp
         menu.h
         server.cpp
@@ -47,7 +45,6 @@ else()
     endif()
 endif()
 
-target_link_libraries(MyServer PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(MyServer PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::Network
