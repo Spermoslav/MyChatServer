@@ -12,5 +12,11 @@ class Menu : public QWidget
 public:
     Menu(QWidget *parent = nullptr);
     ~Menu();
+
+    void textBrowserAppend(const QString& text);
+
+private:
+    QTextBrowser* textBrowser;
+    QVBoxLayout* mainLay;
 };
 #endif // MENU_H
