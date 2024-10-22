@@ -1,13 +1,14 @@
 #include "server.h"
+#include <QTime>
 
 Server::Server(Menu* menu) :
     menu(menu)
 {
     if(listen(QHostAddress::Any, 1234)) {
-        menu->textBrowserAppend("Server listening");
+        appendMessage("Server listening");
     }
     else {
-        menu->textBrowserAppend("Server not listening");
+        appendMessage("Server not listening");
     }
 }
 
@@ -18,7 +19,7 @@ void Server::incomingConnection(qintptr sd)
     connect(socket, &QTcpSocket::readyRead, this, &Server::slotReadyRead);
     connect(socket, &QTcpSocket::disconnected, this, &Server::socketDisconnected);
     sockets.push_back(socket);
-    menu->textBrowserAppend("Client connected" + QString::number(sd));
+    appendMessage("Client connected" + QString::number(sd));
 }
 
 void Server::socketDisconnected()
@@ -31,7 +32,12 @@ void Server::socketDisconnected()
             break;
         }
     }
-    menu->textBrowserAppend("Client disconnected");
+    appendMessage("Client disconnected");
+}
+
+void Server::appendMessage(const QString &text)
+{
+    menu->textBrowserAppend(QTime::currentTime().toString() + " " + text);
 }
 
 void Server::slotReadyRead()
@@ -59,7 +65,7 @@ void Server::slotReadyRead()
         }
     }
     else {
-        menu->textBrowserAppend("DataStream error. Message has not read");
+        appendMessage("DataStream error. Message has not read");
     }
 }
 

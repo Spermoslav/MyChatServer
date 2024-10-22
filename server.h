@@ -17,6 +17,7 @@ public slots:
     void incomingConnection(qintptr sd) override;
     void slotReadyRead();
     void socketDisconnected();
+    void appendMessage(const QString& text);
 
 private:
     void sendToClient(const QString& str);
