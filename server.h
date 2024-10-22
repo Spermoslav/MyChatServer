@@ -1,3 +1,17 @@
+#ifndef SERVER_H
+#define SERVER_H
+
+#include <QTcpServer>
+#include <QTcpSocket>
+#include <list>
+
+#include "menu.h"
+
+class Server : public QTcpServer
+{
+    Q_OBJECT
+public:
+    Server(Menu* menu);
 
 public slots:
     void incomingConnection(qintptr sd) override;
@@ -10,6 +24,9 @@ private:
     std::list<QTcpSocket*> sockets;
     QByteArray data;
     quint16 nextBlockSize{0};
-    QTcpSocket *socket;
+    QTcpSocket* socket;
 
+    Menu* menu;
+};
 
+#endif // SERVER_H
