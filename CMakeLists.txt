@@ -20,6 +20,8 @@ set(PROJECT_SOURCES
         widget.h
         menu.cpp
         menu.h
+        server.cpp
+        server.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
