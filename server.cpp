@@ -59,7 +59,21 @@ void Server::slotReadyRead()
         }
     }
     else {
-        menu->textBrowserAppend("DataStream error. Message has not send");
+        menu->textBrowserAppend("DataStream error. Message has not read");
     }
 }
+
+void Server::sendToClient(const QString& str)
+{
+    data.clear();
+    QDataStream out(&data, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_6_2);
+    out << quint16(0) << str;
+    out.device()->seek(0);
+    out << quint16(data.size() - sizeof(quint16));
+    out << str;
+
+    for(auto e : sockets) {
+        e->write(data);
+    }
 }

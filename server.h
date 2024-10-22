@@ -11,7 +11,7 @@ class Server : public QTcpServer
 {
     Q_OBJECT
 public:
-    Server(Menu* menu);
+    explicit Server(Menu* menu);
 
 public slots:
     void incomingConnection(qintptr sd) override;
