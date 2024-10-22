@@ -33,4 +33,33 @@ void Server::socketDisconnected()
     }
     menu->textBrowserAppend("Client disconnected");
 }
+
+void Server::slotReadyRead()
+{
+    socket = static_cast<QTcpSocket*> (sender());
+    QDataStream in(socket);
+    in.setVersion(QDataStream::Qt_6_2);
+    if(in.status() == QDataStream::Ok) {
+        for(;;) {
+            if(nextBlockSize == 0) {
+                if(socket->bytesAvailable() < 2) {
+                    break;
+                }
+                in >> nextBlockSize;
+            }
+            if(socket->bytesAvailable() < nextBlockSize) {
+                break;
+            }
+
+            QString str;
+            in >> str;
+            nextBlockSize = 0;
+            sendToClient(str);
+            break;
+        }
+    }
+    else {
+        menu->textBrowserAppend("DataStream error. Message has not send");
+    }
+}
 }
