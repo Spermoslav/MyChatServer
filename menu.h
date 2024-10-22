@@ -5,6 +5,8 @@
 #include <QTextBrowser>
 #include <QVBoxLayout>
 
+class Server;
+
 class Menu : public QWidget
 {
     Q_OBJECT
@@ -18,5 +20,7 @@ public:
 private:
     QTextBrowser* textBrowser;
     QVBoxLayout* mainLay;
+
+    Server* server;
 };
 #endif // MENU_H
