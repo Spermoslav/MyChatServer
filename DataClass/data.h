@@ -24,3 +24,11 @@ struct Data
     QString text;
     DataType type;
 };
+
+[[nodiscard]] bool writeNewAccount(const QString& data);
+
+[[nodiscard]] std::optional<QString> findAccount(const QString& nickname);
+
+[[nodiscard]] std::pair<QString, QString> accDataSplit(const QString& accData);
+
+#endif // DATA_H
