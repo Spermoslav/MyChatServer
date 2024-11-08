@@ -1,11 +1,16 @@
-#include "server.h"
 #include <QTime>
+#include <QDir>
+
+#include "server.h"
 
 Server::Server(Menu* menu) :
     menu(menu)
 {
     if(listen(QHostAddress::Any, 1234)) {
         appendMessage("Server listening");
+        QDir d = QDir::current();
+        d.mkdir("Data");
+
     }
     else {
         appendMessage("Server not listening");
