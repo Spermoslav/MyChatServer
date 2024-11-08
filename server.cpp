@@ -105,17 +105,30 @@ void Server::slotReadyRead()
     }
 }
 
-void Server::sendToClient(const QString& str)
+void Server::sendToClient(const Data& d, QTcpSocket* client)
 {
     data.clear();
     QDataStream out(&data, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_6_2);
-    out << quint16(0) << str;
+    out << quint16(0);
+    out << d.type;
+    out << d.text;
     out.device()->seek(0);
     out << quint16(data.size() - sizeof(quint16));
-    out << str;
+    out << d.type;
+    out << d.text;
 
-    for(auto e : sockets) {
-        e->write(data);
+    if(d.type == Message || d.type == Info) {
+        for(auto e : sockets) {
+            e->write(data);
+        }
+    }
+    else {
+        if(client) {
+            client->write(data);
+        }
+        else {
+            qDebug() << __FUNCTION__ << " client == nullptr";
+        }
     }
 }

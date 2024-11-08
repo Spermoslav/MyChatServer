@@ -21,7 +21,7 @@ public slots:
     void appendMessage(const QString& text);
 
 private:
-    void sendToClient(const QString& str);
+    void sendToClient(const Data &d, QTcpSocket *client = nullptr);
 
     std::list<QTcpSocket*> sockets;
     QByteArray data;
