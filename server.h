@@ -6,6 +6,7 @@
 #include <list>
 
 #include "menu.h"
+#include "data.h"
 
 class Server : public QTcpServer
 {

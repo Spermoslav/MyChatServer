@@ -51,21 +51,52 @@ void Server::slotReadyRead()
     QDataStream in(socket);
     in.setVersion(QDataStream::Qt_6_2);
     if(in.status() == QDataStream::Ok) {
-        for(;;) {
-            if(nextBlockSize == 0) {
-                if(socket->bytesAvailable() < 2) {
-                    break;
-                }
-                in >> nextBlockSize;
+        if(nextBlockSize == 0) {
+            if(socket->bytesAvailable() < 2) {
+                return;
             }
-            if(socket->bytesAvailable() < nextBlockSize) {
-                break;
-            }
+            in >> nextBlockSize;
+        }
+        if(socket->bytesAvailable() < nextBlockSize) {
+            return;
+        }
 
-            QString str;
-            in >> str;
-            nextBlockSize = 0;
-            sendToClient(str);
+        Data d;
+        in >> d.type;
+        in >> d.text;
+        nextBlockSize = 0;
+
+        switch (d.type) {
+        case Message:
+            sendToClient(d);
+            break;
+        case Info:
+            sendToClient(d);
+            break;
+        case Login: {
+            std::optional<QString> f = findAccount(accDataSplit(d.text).first);
+
+            if(f != std::nullopt) {
+                if(accDataSplit(d.text).second == accDataSplit(*f).second) {
+                    sendToClient(d, socket);
+                }
+                else {
+                    sendToClient(Data("p", Login), socket);
+                }
+            }
+            else {
+                sendToClient(Data("n", Login), socket);
+            }
+            break;
+        }
+        case Registration: {
+                if(writeNewAccount(d.text)) {
+                    sendToClient(d + "Reg succes", socket);
+                }
+                else {
+                    sendToClient(Data("e", Registration), socket);
+                }
+            }
             break;
         }
     }
