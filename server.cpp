@@ -91,7 +91,7 @@ void Server::slotReadyRead()
         }
         case Registration: {
                 if(writeNewAccount(d.text)) {
-                    sendToClient(d + "Reg succes", socket);
+                    sendToClient(d, socket);
                 }
                 else {
                     sendToClient(Data("e", Registration), socket);
